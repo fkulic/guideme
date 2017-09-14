@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">Guide Me</string>
+    <string name="title_activity_new_landmark">New landmark</string>
+    <string name="ext_storage_not_granted">Can\'t create new landmark without permission to write to storage.</string>
+    <string name="permission_rec_audio_not_granted">Can\'t record audio without permission.</string>
+    <string name="landmark_not_valid">Name has to be at least 5 characters long, description 20 characters long and landmark has to have a picture.</string>
+    <string name="name_of_audio">Name of audio file</string>
+    <string name="pick_source">Pick source</string>
+    <string name="add_audio">Add audio</string>
+    <string name="are_you_sure_add_audio">Do you want to add this audio file to the landmark?</string>
+    <string name="error_no_audio">Please record audio first.</string>
+    <string name="error_uploading_files">Error has occurred while uploading files. Try again later.</string>
+    <string name="new_landmark_success">Successfully created new Landmark.</string>
+    <string name="audio_name_too_short">Name has to be at least 3 characters long.</string>
+    <string name="error_has_dot">Name mustn\'t contain \".\"(dot).</string>
+    <string name="error_has_dollar">Name mustn\'t contain \"$\" (dollar).</string>
+    <string name="error_has_hashtag">Name mustn\'t contain \"#\" (hashtag).</string>
+    <string name="error_has_sqrbrc">Name musn\'t contain \"[\" or \"]\" (square braces).</string>
+    <string name="error_has_forw_slash">Name musn\'t contain \"/\" (forward slash).</string>
+    <string name="loading">Loading...</string>
+    <string name="wait_loading">Please wait while data is loading...</string>
+    <string name="hi">Hi.</string>
+    <string name="tv_confirm_location">Please confirm your location</string>
+    <string name="not_there">No I\'m not there but I\'d like to check out your list of cities.</string>
+    <string name="no_permission_check_list_cities">I do not want to give you permission to access my location, but I\'ll check out your list of cities.</string>
+    <string name="no_permission_location">We do not have permission to access your location.</string>
+    <string name="give_permission">Give permission</string>
+    <string name="turn_gps_on">Please turn on GPS.</string>
+    <string name="button_turn_gps_on">Turn GPS on</string>
+    <string name="no_gps_check_city_list">I do not want to turn on GPS, but I\\\'ll check out your list of cities.</string>
+    <string name="b_confirm_location">Yes, I\'m here.</string>
+    <string name="searching_gps">Searching for GPS signal...</string>
+    <string name="still_searching">Hey! I\'m still searching...</string>
+    <string name="list_of_cities">List of cities</string>
+    <string name="new_landmark">New landmark</string>
+    <string name="error_creating_img_file">Couldn\'t create image file.</string>
+    <string name="ext_storage_not_granted_img">Can\'t load image without permission read from external storage.</string>
+
+    <string-array name="audio_dialog">
+        <item>File</item>
+        <item>Record</item>
+        <item>Cancel</item>
+    </string-array>
+    <string name="title_activity_new_audioo">NewAudiooActivity</string>
+    <string name="record_new_audio">Record new audio</string>
+    <string name="warning_leave_unsaved">Are you sure?</string>
+    <string name="warning_leave_unsaved_audio">Are you sure you want to leave? Audio file will not be saved.</string>
+    <string name="warning_leave_unsaved_landmark">Are you sure you want to leave? Landmark will not be saved.</string>
+    <string name="save">Save</string>
+    <string name="gps_not_available_check_cities">It\'s fine, let me check your list of cities.</string>
+    <string name="gps_not_available">GPS currently is not available, try again later.</string>
+    <string name="sad_face">:(</string>
+    <string name="error_audio_player_file_not_found">Couldn\'t play audio. File not found.</string>
+</resources>

@@ -1,0 +1,15 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="app_bar_height">220dp</dimen>
+    <dimen name="body_padding">16dp</dimen>
+    <dimen name="new_landmark_vertical_spacing">8dp</dimen>
+    <dimen name="padding_list_landmarks">8dp</dimen>
+    <dimen name="toolbar_right_left_padding">4dp</dimen>
+    <dimen name="appbar_gradient_height">90dp</dimen>
+    <dimen name="three_line_list_item_padding">16dp</dimen>
+    <dimen name="list_top_bottom_padding">8dp</dimen>
+    <dimen name="itemLand_height">150dp</dimen>
+    <dimen name="itemLand_side_margin">32dp</dimen>
+    <dimen name="icon_size">48dp</dimen>
+</resources>

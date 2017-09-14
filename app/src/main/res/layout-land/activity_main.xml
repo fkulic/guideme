@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryLight"
+    tools:context="com.fkulic.guideme.ui.activities.MainActivity">
+
+    <TextView
+        android:id="@+id/tvHi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/hi"
+        android:textColor="@color/mainTvHi"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvDenyAction"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15"/>
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/tv_confirm_location"
+        android:textColor="@color/mainTvConfirmLoc"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHi"/>
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:lines="3"
+        android:textColor="@color/mainTvLocation"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvMessage"/>
+
+    <Button
+        android:id="@+id/bAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="24dp"
+        android:background="@drawable/button_transparent_border"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:text="@string/b_confirm_location"
+        android:textColor="@color/mainButtonConfirmLoc"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tvDenyAction"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_goneMarginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/tvNotThere"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="56dp"
+        android:layout_marginLeft="56dp"
+        android:gravity="center"
+        android:text="@string/not_there"
+        android:textColor="@color/mainTvNotThere"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="@+id/bAction"
+        app:layout_constraintBottom_toBottomOf="@+id/bAction"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/bAction"/>
+</android.support.constraint.ConstraintLayout>

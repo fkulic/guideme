@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/newAudioWindowBackground"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.fkulic.guideme.ui.activities.NewAudioActivity"
+    tools:showIn="@layout/activity_new_audio">
+
+    <EditText
+        android:id="@+id/etAudioName"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:hint="@string/name_of_audio"
+        android:textColor="@color/secondary"
+        android:textColorHint="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabRecAudio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_mic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAudioName"
+        app:layout_constraintVertical_bias="0.35"/>
+
+    <TextView
+        android:id="@+id/tvAudioCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fabRecAudio"/>
+
+    <ImageButton
+        android:id="@+id/ibNewAudioStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:src="@drawable/ic_stop"
+        android:tint="@color/new_audio_states_clickable"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/ibNewAudioPlay"
+        app:layout_constraintTop_toBottomOf="@+id/fabRecAudio"
+        app:layout_constraintVertical_bias="0.4"/>
+
+    <ImageButton
+        android:id="@+id/ibNewAudioPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:src="@drawable/ic_play"
+        android:tint="@color/new_audio_states_clickable"
+        app:layout_constraintBottom_toBottomOf="@+id/ibNewAudioStop"
+        app:layout_constraintLeft_toRightOf="@+id/ibNewAudioStop"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ibNewAudioStop"/>
+
+    <Button
+        android:id="@+id/bSaveAudio"
+        style="@style/AppTheme.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_save"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

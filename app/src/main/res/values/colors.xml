@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="darkGray">#777</color>
+    <color name="black_opacity_67">#AA000000</color>
+    <color name="transparent">@android:color/transparent</color>
+
+    <!-- Theme colors -->
+    <color name="primary">@color/primary500</color>
+    <color name="primaryLight">@color/primary300</color>
+    <color name="primaryDark">@color/primary800</color>
+    <color name="secondary">@color/secondary500</color>
+    <color name="secondaryLight">@color/secondary300</color>
+    <color name="secondaryDark">@color/secondary800</color>
+    <color name="secondaryText">#757575</color>
+
+    <!-- Primary colors -->
+    <color name="primary50">#e0f2f1</color>
+    <color name="primary100">#b2dfdb</color>
+    <color name="primary200">#80cbc4</color>
+    <color name="primary300">#4db6ac</color>
+    <color name="primary400">#26a69a</color>
+    <color name="primary500">#009688</color>
+    <color name="primary600">#00897b</color>
+    <color name="primary700">#00796b</color>
+    <color name="primary800">#00695c</color>
+    <color name="primary900">#004d40</color>
+    <color name="primaryA100">#a7ffeb</color>
+    <color name="primaryA200">#64ffda</color>
+    <color name="primaryA400">#1de9b6</color>
+    <color name="primaryA700">#00bfa5</color>
+
+    <!-- Secondary colors -->
+    <color name="secondary50">#fbe9e7</color>
+    <color name="secondary100">#ffccbc</color>
+    <color name="secondary200">#ffab91</color>
+    <color name="secondary300">#ff8a65</color>
+    <color name="secondary400">#ff7043</color>
+    <color name="secondary500">#ff5722</color>
+    <color name="secondary600">#f4511e</color>
+    <color name="secondary700">#e64a19</color>
+    <color name="secondary800">#d84315</color>
+    <color name="secondary900">#bf360c</color>
+    <color name="secondaryA100">#ff9e80</color>
+    <color name="secondaryA200">#ff6e40</color>
+    <color name="secondaryA400">#ff3d00</color>
+    <color name="secondaryA700">#dd2c00</color>
+
+    <!-- Main activity -->
+    <color name="mainTvHi">@color/secondary</color>
+    <color name="mainTvConfirmLoc">@color/secondary50</color>
+    <color name="mainTvLocation">@color/white</color>
+    <color name="mainButtonConfirmLoc">@color/secondary</color>
+    <color name="mainTvNotThere">@color/secondary</color>
+
+    <!-- ListLandmarks activity -->
+    <color name="listLandWindowBackground">@color/primary50</color>
+
+    <!-- Item Landmark -->
+    <color name="itemLandTextShadow">#555</color>
+    <color name="itemLandTextColor">@color/white</color>
+    <color name="newAudioWindowBackground">@color/primaryLight</color>
+
+
+</resources>

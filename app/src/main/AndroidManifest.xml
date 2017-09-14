@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.fkulic.guideme">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-feature android:name="android.hardware.location.gps"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_guideme"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_guideme_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.ListCitiesActivity"
+            android:configChanges="screenSize|orientation|screenLayout"/>
+        <activity
+            android:name=".ui.activities.ListLandmarksActivity"
+            android:configChanges="screenSize|orientation|screenLayout"/>
+        <activity
+            android:name=".ui.activities.MapActivity"
+            android:configChanges="screenSize|orientation|screenLayout"/>
+        <activity
+            android:name=".ui.activities.LandmarkDetailsActivity"/>
+        <activity
+            android:name=".ui.activities.NewLandmarkActivity"
+            android:configChanges="screenSize|orientation|screenLayout"/>
+        <activity
+            android:name=".ui.activities.NewAudioActivity"
+            android:configChanges="screenSize|orientation|screenLayout"/>
+
+        <service android:name=".audio.AudioPlayerService"/>
+
+        <receiver
+            android:name=".audio.AudioPlayerNotificationsReceiver"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAitmwhlNAfaNFnD7jDwtVV4CtbXtwYgEw"/>
+
+    </application>
+
+</manifest>
