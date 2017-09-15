@@ -177,6 +177,7 @@ public class NewLandmarkActivity extends BaseActivity implements NewLandmarkAudi
             intent.putExtra(KEY_NEW_LANDMARK, true);
             startActivity(intent);
         } else {
+            // TODO: 15.9.2017. show edittext errors 
             showSnackbar(R.string.landmark_not_valid);
         }
     }

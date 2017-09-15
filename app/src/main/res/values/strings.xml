@@ -53,4 +53,9 @@
     <string name="error_audio_player_file_not_found">Couldn\'t play audio. File not found.</string>
     <string name="approaching_landmark_message">Click to see more details.</string>
     <string name="approaching_landmark_title">Approaching landmark</string>
+    <string name="upload_success">Successfully uploaded</string>
+    <string name="new_landmark_created">New landmark created.</string>
+    <string name="uploading_files">Uploading files...</string>
+    <string name="upload_failure">Upload failed</string>
+    <string name="new_landmark_not_created">New landmark was not created.</string>
 </resources>

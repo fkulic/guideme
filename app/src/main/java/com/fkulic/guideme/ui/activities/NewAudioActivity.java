@@ -118,13 +118,16 @@ public class NewAudioActivity extends BaseActivity implements MediaPlayer.OnComp
 
     private void finishActivityAndSendResult() {
         Intent resultIntent = new Intent();
-        String fileName = etAudioName.getText().toString() + ".3gp";
+        String fileName = etAudioName.getText().toString();
         File recording = new File(mAudioName);
-        if (recording.renameTo(new File(dirPath, fileName))) {
+        File audioFile = new File(dirPath, fileName + ".3gp");
+        if (recording.renameTo(audioFile)) {
+//            Log.d(TAG, "succes: " + audioFile.getAbsolutePath());
             resultIntent.putExtra(KEY_AUDIO_NAME, fileName);
-            resultIntent.putExtra(KEY_AUDIO_PATH, recording.getAbsolutePath());
+            resultIntent.putExtra(KEY_AUDIO_PATH, audioFile.getAbsolutePath());
             this.setResult(RESULT_OK, resultIntent);
         } else {
+//            Log.d(TAG, "failed to rename file");
             recording.delete();
         }
         this.finish();

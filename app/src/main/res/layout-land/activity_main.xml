@@ -68,7 +68,7 @@
         app:layout_goneMarginBottom="24dp"/>
 
     <TextView
-        android:id="@+id/tvNotThere"
+        android:id="@+id/tvDenyAction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="56dp"

@@ -141,6 +141,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         switch (mGpsStatus) {
             case ON:
                 if (mCity != null) {
+                    SharedPrefsHelper.getInstance(this).setCurrentCity(mCity.coordinates.getLatLngStringForDB());
                     Intent listLandmarksIntent = new Intent(MainActivity.this, ListLandmarksActivity.class);
                     listLandmarksIntent.putExtra(KEY_CITY_NAME, mCity.name);
                     listLandmarksIntent.putExtra(KEY_CITY_LATLNG, mCity.coordinates.getLatLngStringForDB());
@@ -181,7 +182,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mCity = new City(address.getLocality(), address.getAdminArea(), address.getCountryName(), latLng);
 //            Log.d(TAG, "City from location name: " + mCity.toString());
-            SharedPrefsHelper.getInstance(this).setCurrentCity(mCity.coordinates.getLatLngStringForDB());
         }
     }
 

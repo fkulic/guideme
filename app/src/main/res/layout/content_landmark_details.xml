@@ -44,14 +44,13 @@
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
 
-        <ImageButton
-            android:id="@+id/ibSaveLandmark"
+        <Button
+            android:id="@+id/bSaveLandmark"
+            style="@style/AppTheme.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/button_transparent_border"
-            android:src="@drawable/ic_save"
+            android:layout_marginTop="40dp"
+            android:text="@string/save"
             android:tint="@color/secondary"
             android:visibility="gone"/>
     </LinearLayout>

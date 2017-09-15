@@ -2,9 +2,7 @@ package com.fkulic.guideme.ui.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,29 +12,18 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fkulic.guideme.R;
-import com.fkulic.guideme.ui.adapters.AudioListAdapter;
 import com.fkulic.guideme.audio.AudioPlayer;
-import com.fkulic.guideme.helper.FirebaseDbHelper;
 import com.fkulic.guideme.helper.SharedPrefsHelper;
 import com.fkulic.guideme.model.Landmark;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.fkulic.guideme.services.UploadService;
+import com.fkulic.guideme.ui.adapters.AudioListAdapter;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +35,7 @@ import static com.fkulic.guideme.Constants.KEY_LANDMARK;
 import static com.fkulic.guideme.Constants.KEY_LANDMARK_DIRECTIONS;
 import static com.fkulic.guideme.Constants.KEY_NEW_LANDMARK;
 
-public class LandmarkDetailsActivity extends AppCompatActivity implements AudioListAdapter.OnPlayAudioFile,
-        OnProgressListener<UploadTask.TaskSnapshot>, OnFailureListener, OnSuccessListener<UploadTask.TaskSnapshot> {
+public class LandmarkDetailsActivity extends AppCompatActivity implements AudioListAdapter.OnPlayAudioFile {
     private static final String TAG = "LandmarkDetailsActivity";
 
     private Landmark mLandmark;
@@ -65,7 +51,7 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
     @BindView(R.id.tvLandmarkDescription) TextView tvLandmarkDescription;
     @BindView(R.id.tvAudioLabel) TextView tvAudioLabel;
     @BindView(R.id.rvAudio) RecyclerView rvAudio;
-    @BindView(R.id.ibSaveLandmark) ImageButton ibSaveLandmark;
+    @BindView(R.id.bSaveLandmark) Button ibSaveLandmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +106,7 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
             width = 2048;
         }
         int height = (int) getResources().getDimension(R.dimen.app_bar_height);
+        // TODO: 15.9.2017. fix local img not showing
 //        Log.d(TAG, "dimensions: " +width + "x" +height);
         Picasso.with(this)
                 .load(mLandmark.imgUrl)
@@ -152,65 +139,11 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
         mAudioPlayer.play(mLandmark, audioName);
     }
 
-    @OnClick(R.id.ibSaveLandmark)
+    @OnClick(R.id.bSaveLandmark)
     public void onClickSaveLandmark() {
-        uploadFile();
+        Intent uploadIntent = new Intent(getApplicationContext(), UploadService.class);
+        uploadIntent.putExtra(KEY_LANDMARK, mLandmark);
+        startService(uploadIntent);
+        startActivity(new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class));
     }
-
-    private void uploadFile() {
-        StorageReference storage = FirebaseStorage.getInstance().getReference();
-        String latLng = mLandmark.coordinates.getLatLngStringForDB();
-        Uri uri;
-        if (mUploadFilesCount == 0) {
-            uri = Uri.parse(mLandmark.imgUrl);
-            storage = storage.child("images/" + latLng + "/" + uri.getLastPathSegment());
-        } else {
-            uri = Uri.parse(mLandmark.audioUrls.get(mAudioKeys.get(mUploadFilesCount-1)));
-            storage = storage.child("audio/" + latLng + "/" + uri.getLastPathSegment());
-        }
-
-        Log.d(TAG, "uploadFile: uri = " + uri.toString());
-
-        try {
-            InputStream stream = new FileInputStream(new File(uri.toString()));
-            UploadTask uploadTask = storage.putStream(stream);
-            uploadTask.addOnSuccessListener(this);
-            uploadTask.addOnProgressListener(this);
-            uploadTask.addOnFailureListener(this);
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to upload. File not found.", e);
-        }
-    }
-
-    private void updateDatabase() {
-        FirebaseDbHelper.addLandmark(SharedPrefsHelper.getInstance(this).getCurrentCity(), mLandmark);
-        Toast.makeText(getApplicationContext(), R.string.new_landmark_success, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-    }
-
-    @Override
-    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-        String url = taskSnapshot.getDownloadUrl().toString();
-        if (mUploadFilesCount == 0) {
-            mLandmark.imgUrl = url;
-        } else {
-            mLandmark.audioUrls.put(mAudioKeys.get(mUploadFilesCount - 1), url);
-        }
-        mUploadFilesCount++;
-        if (mUploadFilesCount < mLandmark.getFileCount()) {
-            uploadFile();
-        } else {
-            updateDatabase();
-        }
-    }
-
-    @Override
-    public void onFailure(@NonNull Exception e) {
-        e.printStackTrace();
-        Toast.makeText(this, R.string.error_uploading_files, Toast.LENGTH_SHORT).show();
-    }
-
 }

@@ -77,7 +77,6 @@
         style="@style/AppTheme.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_save"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

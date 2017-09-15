@@ -48,7 +48,9 @@ import static com.fkulic.guideme.Constants.KEY_LANDMARK;
 import static com.fkulic.guideme.Constants.KEY_LANDMARK_DIRECTIONS;
 import static com.fkulic.guideme.Constants.PERMISSION_REQ_FINE_LOC;
 
-public class MapActivity extends BaseActivity implements OnMapReadyCallback, LocationListener, FirebaseDbHelper.FirebaseDataService, RoutingListener {
+public class MapActivity extends BaseActivity implements OnMapReadyCallback, LocationListener,
+        FirebaseDbHelper.FirebaseDataService, RoutingListener {
+
     private static final String TAG = "MapActivity";
 
     private City mCity;
@@ -113,6 +115,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     }
 
     @Override
+    protected void onDestroy() {
+        mLocationManager.removeUpdates(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mGoogleMap = googleMap;
         mGoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style));
@@ -149,7 +157,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
                 requestDirections();
             }
             // TODO: 15.9.2017.  switch to geofencing in (possible) future & create location service
-            if (location.distanceTo(mDestination) < 20000 && !mNotifiedApproaching) {
+            if (location.distanceTo(mDestination) < 20 && !mNotifiedApproaching) {
                 Intent landmarkIntent = new Intent(MapActivity.this, LandmarkDetailsActivity.class);
                 landmarkIntent.putExtra(KEY_LANDMARK, mGoToLandmark);
 
