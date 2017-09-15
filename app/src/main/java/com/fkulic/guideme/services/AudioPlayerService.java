@@ -1,4 +1,4 @@
-package com.fkulic.guideme.audio;
+package com.fkulic.guideme.services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.fkulic.guideme.R;
+import com.fkulic.guideme.audio.NotificationAudioController;
 
 import java.io.IOException;
 
@@ -29,7 +30,7 @@ public class AudioPlayerService extends Service implements MediaPlayer.OnPrepare
     private static String currentlyPlaying;
     private static PlayerStatus playerStatus = PlayerStatus.STOPPED;
 
-    enum PlayerStatus {
+    public enum PlayerStatus {
         PLAYING, PAUSED, STOPPED
     }
 

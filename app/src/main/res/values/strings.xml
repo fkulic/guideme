@@ -51,4 +51,6 @@
     <string name="gps_not_available">GPS currently is not available, try again later.</string>
     <string name="sad_face">:(</string>
     <string name="error_audio_player_file_not_found">Couldn\'t play audio. File not found.</string>
+    <string name="approaching_landmark_message">Click to see more details.</string>
+    <string name="approaching_landmark_title">Approaching landmark</string>
 </resources>

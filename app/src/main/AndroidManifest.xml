@@ -33,6 +33,7 @@
             android:configChanges="screenSize|orientation|screenLayout"/>
         <activity
             android:name=".ui.activities.ListLandmarksActivity"
+            android:parentActivityName=".ui.activities.MainActivity"
             android:configChanges="screenSize|orientation|screenLayout"/>
         <activity
             android:name=".ui.activities.MapActivity"
@@ -46,7 +47,8 @@
             android:name=".ui.activities.NewAudioActivity"
             android:configChanges="screenSize|orientation|screenLayout"/>
 
-        <service android:name=".audio.AudioPlayerService"/>
+        <service android:name=".services.AudioPlayerService"/>
+        <service android:name=".services.UploadService"/>
 
         <receiver
             android:name=".audio.AudioPlayerNotificationsReceiver"

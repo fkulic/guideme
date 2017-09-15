@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.fkulic.guideme.R;
 import com.fkulic.guideme.helper.FirebaseDbHelper;
+import com.fkulic.guideme.helper.SharedPrefsHelper;
 import com.fkulic.guideme.model.City;
 import com.fkulic.guideme.model.Landmark;
 import com.fkulic.guideme.ui.LoadingDataDialog;
@@ -21,7 +24,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.fkulic.guideme.Constants.KEY_CITY_LATLNG;
-import static com.fkulic.guideme.Constants.KEY_CITY_NAME;
 import static com.fkulic.guideme.Constants.KEY_LANDMARK;
 
 public class ListLandmarksActivity extends BaseActivity implements FirebaseDbHelper.FirebaseDataService, LandmarkAdapter.LandmarkOnClickListener {
@@ -50,18 +52,39 @@ public class ListLandmarksActivity extends BaseActivity implements FirebaseDbHel
         mLoadingDataDialog.show();
 
         Intent intent = this.getIntent();
+        String latlng;
         if (intent.hasExtra(KEY_CITY_LATLNG)) {
-            FirebaseDbHelper fb = new FirebaseDbHelper(this);
-            fb.getLandmarks(intent.getStringExtra(KEY_CITY_LATLNG));
-            if (intent.hasExtra(KEY_CITY_NAME)) {
-                setUpToolbar(intent.getStringExtra(KEY_CITY_NAME), true);
-            }
+            latlng = intent.getStringExtra(KEY_CITY_LATLNG);
         } else {
+            latlng = SharedPrefsHelper.getInstance(this).getCurrentCity();
+        }
+        if (latlng == null) {
             mLoadingDataDialog.stop();
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             finish();
         }
+        FirebaseDbHelper fb = new FirebaseDbHelper(this);
+        fb.getLandmarks(latlng);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(new Intent(ListLandmarksActivity.this, MainActivity.class));
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                startActivity(new Intent(ListLandmarksActivity.this, MainActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @OnClick(R.id.ibNewLandmark)
     void onClickNewLandmark() {
@@ -85,6 +108,7 @@ public class ListLandmarksActivity extends BaseActivity implements FirebaseDbHel
     @Override
     public void cityDataReady(City city) {
         mCity = city;
+        setUpToolbar(city.name, true);
         mLoadingDataDialog.stop();
         this.mLandmarkAdapter.loadLandmarks(new ArrayList<>(city.landmarks.values()));
     }

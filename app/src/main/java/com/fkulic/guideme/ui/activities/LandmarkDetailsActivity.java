@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fkulic.guideme.R;
-import com.fkulic.guideme.audio.AudioListAdapter;
+import com.fkulic.guideme.ui.adapters.AudioListAdapter;
 import com.fkulic.guideme.audio.AudioPlayer;
 import com.fkulic.guideme.helper.FirebaseDbHelper;
 import com.fkulic.guideme.helper.SharedPrefsHelper;
@@ -83,6 +85,24 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startActivity(new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class));
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                startActivity(new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setUpUI() {

@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 
 import com.fkulic.guideme.model.Landmark;
+import com.fkulic.guideme.services.AudioPlayerService;
 
 /**
  * Created by Filip on 3.9.2017..

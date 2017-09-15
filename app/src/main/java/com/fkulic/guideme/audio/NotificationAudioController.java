@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.fkulic.guideme.R;
 import com.fkulic.guideme.model.Landmark;
+import com.fkulic.guideme.services.AudioPlayerService;
 import com.fkulic.guideme.ui.activities.LandmarkDetailsActivity;
 
 import static com.fkulic.guideme.Constants.ACTION;
@@ -70,7 +71,7 @@ public class NotificationAudioController  {
         mNotification = new NotificationCompat.Builder(mContext)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setLargeIcon(bigIcon)
-                .setSmallIcon(R.drawable.ic_music_note)
+                .setSmallIcon(R.drawable.icon)
                 .setContentIntent(PendingIntent.getActivity(mContext, NOTIFICATION_ID, intentDetails, PendingIntent.FLAG_ONE_SHOT))
                 .addAction(R.drawable.ic_stop, "Stop", createPendingIntent(ACTION_STOP, STOP_ID))
                 .addAction(playPauseResource, playPause, playPauseIntent)
@@ -100,7 +101,7 @@ public class NotificationAudioController  {
         createNotificationController(mLandmark, mPlaying);
     }
 
-    static void destroyNotification() {
+    public static void destroyNotification() {
         notificationManager.cancel(NOTIFICATION_ID);
     }
 }
