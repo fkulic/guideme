@@ -51,7 +51,8 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
     @BindView(R.id.tvLandmarkDescription) TextView tvLandmarkDescription;
     @BindView(R.id.tvAudioLabel) TextView tvAudioLabel;
     @BindView(R.id.rvAudio) RecyclerView rvAudio;
-    @BindView(R.id.bSaveLandmark) Button ibSaveLandmark;
+    @BindView(R.id.bSaveLandmark) Button bSaveLandmark;
+    private boolean mNewLandmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +63,9 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
             this.mLandmark = intent.getParcelableExtra(KEY_LANDMARK);
             Log.d(TAG, "onCreate: " + this.mLandmark.toString());
             ButterKnife.bind(this);
+            mNewLandmark = intent.getBooleanExtra(KEY_NEW_LANDMARK, false);
             setUpUI();
             mAudioPlayer = new AudioPlayer(this);
-            if (intent.hasExtra(KEY_NEW_LANDMARK)) {
-                if (intent.getBooleanExtra(KEY_NEW_LANDMARK, false)) {
-                    fabTakeMeThere.setVisibility(View.GONE);
-                    ibSaveLandmark.setVisibility(View.VISIBLE);
-                }
-            }
         }
     }
 
@@ -83,7 +79,7 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 startActivity(new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class));
                 return true;
@@ -96,6 +92,7 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
         toolbar.setTitle(mLandmark.name);
         setSupportActionBar(toolbar);
 
+
         int width;
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             width = SharedPrefsHelper.getInstance(this).getWidth();
@@ -106,14 +103,21 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
             width = 2048;
         }
         int height = (int) getResources().getDimension(R.dimen.app_bar_height);
-        // TODO: 15.9.2017. fix local img not showing
 //        Log.d(TAG, "dimensions: " +width + "x" +height);
+
+        String local = "";
+        if (mNewLandmark) {
+            fabTakeMeThere.setVisibility(View.GONE);
+            bSaveLandmark.setVisibility(View.VISIBLE);
+            local = "file://";
+        }
+
+//        Log.d(TAG, "setUpUI: img = " + local + mLandmark.imgUrl);
         Picasso.with(this)
-                .load(mLandmark.imgUrl)
+                .load(local + mLandmark.imgUrl)
                 .resize(width, height)
                 .centerCrop()
                 .into(this.ivLandmarkPhotoDetails);
-
 
         this.tvLandmarkDescription.setText(mLandmark.description);
 

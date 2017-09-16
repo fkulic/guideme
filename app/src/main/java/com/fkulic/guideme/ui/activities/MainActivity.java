@@ -101,7 +101,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 if (mCity == null) {
                     tvLocation.setText(R.string.searching_gps);
                 } else {
-                    // TODO: 10.9.2017. Animacija  za searching (TextSwitcher ili slicno)
                     tvLocation.setText(mCity.toString());
                 }
                 break;
@@ -168,6 +167,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
     @OnClick(R.id.tvDenyAction)
     public void denyAction() {
+        SharedPrefsHelper.getInstance(this).setCurrentCity(null);
         Intent intent = new Intent(MainActivity.this, ListCitiesActivity.class);
         startActivity(intent);
     }

@@ -107,6 +107,7 @@ public class UploadService extends IntentService implements OnSuccessListener<Up
     }
 
     private void updateDatabase() {
+        // TODO: 16.9.2017. add city if not exists 
         FirebaseDbHelper.addLandmark(SharedPrefsHelper.getInstance(this).getCurrentCity(), mLandmark);
         mBuilder.setOngoing(false)
                 .setSmallIcon(R.drawable.ic_success)

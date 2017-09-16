@@ -8,11 +8,11 @@ import android.content.SharedPreferences;
  */
 
 public class SharedPrefsHelper {
-    private static String FILE_NAME = "GuideMePrefs";
-    private static String DEVICE_HEIGHT = "device_height";
-    private static String DEVICE_WIDTH = "device_width";
-    private static String CURRENT_CITY = "current_city";
-    private static String PERMISSION_ASKED_LOCATION = "permission_asked_loc";
+    private static final String FILE_NAME = "GuideMePrefs";
+    private static final String DEVICE_HEIGHT = "device_height";
+    private static final String DEVICE_WIDTH = "device_width";
+    private static final String CURRENT_CITY = "current_city";
+    private static final String PERMISSION_ASKED_LOCATION = "permission_asked_loc";
 
     private static SharedPrefsHelper instance = null;
     private SharedPreferences preferences;

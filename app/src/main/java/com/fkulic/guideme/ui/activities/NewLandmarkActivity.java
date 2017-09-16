@@ -171,14 +171,32 @@ public class NewLandmarkActivity extends BaseActivity implements NewLandmarkAudi
                 etLandmarkDescription.getText().toString(),
                 mImgUrl,
                 mAudioFiles);
-        if (landmark.isValid()) {
-            Intent intent = new Intent(NewLandmarkActivity.this, LandmarkDetailsActivity.class);
-            intent.putExtra(KEY_LANDMARK, landmark);
-            intent.putExtra(KEY_NEW_LANDMARK, true);
-            startActivity(intent);
-        } else {
-            // TODO: 15.9.2017. show edittext errors 
-            showSnackbar(R.string.landmark_not_valid);
+
+        int error = landmark.isValid();
+
+        switch (error) {
+            case Landmark.ERROR_NAME:
+                etLandmarkName.setError(getString(R.string.errror_landmark_name));
+                break;
+
+            case Landmark.ERROR_COORDINATES:
+                Toast.makeText(this, R.string.error_landmark_coordinates, Toast.LENGTH_SHORT).show();
+                break;
+
+            case Landmark.ERROR_DESCRIPTION:
+                etLandmarkDescription.setError(getString(R.string.error_landmark_description));
+                break;
+
+            case Landmark.ERROR_IMG:
+                Toast.makeText(this, R.string.error_landmark_img, Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                Intent intent = new Intent(NewLandmarkActivity.this, LandmarkDetailsActivity.class);
+                intent.putExtra(KEY_LANDMARK, landmark);
+                intent.putExtra(KEY_NEW_LANDMARK, true);
+                startActivity(intent);
+                break;
         }
     }
 

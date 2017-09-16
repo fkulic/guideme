@@ -2,7 +2,6 @@ package com.fkulic.guideme.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -15,7 +14,12 @@ import java.util.Map;
  */
 @IgnoreExtraProperties
 public class Landmark implements Parcelable {
-    private static final String TAG = "Landmark";
+    @Exclude private static final String TAG = "Landmark";
+    @Exclude public static final int ERROR_NAME = 1;
+    @Exclude public static final int ERROR_COORDINATES = 2;
+    @Exclude public static final int ERROR_DESCRIPTION = 3;
+    @Exclude public static final int ERROR_IMG = 4;
+
     public String name;
     public Coordinates coordinates;
     public String description;
@@ -23,7 +27,8 @@ public class Landmark implements Parcelable {
     public Map<String, String> audioUrls;
 
 
-    public Landmark() {}  // Empty constructor for Firebase serialization
+    public Landmark() {
+    }  // Empty constructor for Firebase serialization
 
     public Landmark(String name, Coordinates coordinates, String description, String imgUrl) {
         this.name = name;
@@ -53,21 +58,22 @@ public class Landmark implements Parcelable {
         return audioUrls.size() + 1;
     }
 
-    public boolean isValid() {
+    @Exclude
+    public int isValid() {
         if (name.trim().length() < 5) {
-            Log.d(TAG, "isValid: " + name.trim());
-            return false;
+//            Log.d(TAG, "isValid: " + name.trim());
+            return ERROR_NAME;
         } else if (!coordinates.areValid()) {
-            Log.d(TAG, "isValid: " + coordinates.toString());
-            return false;
+//            Log.d(TAG, "isValid: " + coordinates.toString());
+            return ERROR_COORDINATES;
         } else if (description.trim().length() < 20) {
-            Log.d(TAG, "isValid: " + description.trim());
-            return false;
+//            Log.d(TAG, "isValid: " + description.trim());
+            return ERROR_DESCRIPTION;
         } else if (imgUrl == null) {
-            Log.d(TAG, "isValid: img");
-            return false;
+//            Log.d(TAG, "isValid: img");
+            return ERROR_IMG;
         }
-        return true;
+        return -1;
     }
 
     @Override

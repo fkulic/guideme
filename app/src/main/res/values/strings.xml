@@ -58,4 +58,8 @@
     <string name="uploading_files">Uploading files...</string>
     <string name="upload_failure">Upload failed</string>
     <string name="new_landmark_not_created">New landmark was not created.</string>
+    <string name="errror_landmark_name">Name has to be at least 5 characters long.</string>
+    <string name="error_landmark_description">Description has to be at least 20 characters long.</string>
+    <string name="error_landmark_img">Landmark must have image.</string>
+    <string name="error_landmark_coordinates">Illegal coordinates. Try picking another location.</string>
 </resources>

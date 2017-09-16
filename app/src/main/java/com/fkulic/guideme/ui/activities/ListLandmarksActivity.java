@@ -107,10 +107,15 @@ public class ListLandmarksActivity extends BaseActivity implements FirebaseDbHel
 
     @Override
     public void cityDataReady(City city) {
-        mCity = city;
-        setUpToolbar(city.name, true);
         mLoadingDataDialog.stop();
-        this.mLandmarkAdapter.loadLandmarks(new ArrayList<>(city.landmarks.values()));
+        if (city != null) {
+            mCity = city;
+            setUpToolbar(city.name, true);
+            this.mLandmarkAdapter.loadLandmarks(new ArrayList<>(city.landmarks.values()));
+        } else {
+            onBackPressed();
+            Toast.makeText(getApplicationContext(), "Sorry, but We do not have this city in our database.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
