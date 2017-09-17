@@ -33,13 +33,14 @@
             android:configChanges="screenSize|orientation|screenLayout"/>
         <activity
             android:name=".ui.activities.ListLandmarksActivity"
-            android:parentActivityName=".ui.activities.MainActivity"
-            android:configChanges="screenSize|orientation|screenLayout"/>
+            android:configChanges="screenSize|orientation|screenLayout"
+            android:parentActivityName=".ui.activities.MainActivity"/>
         <activity
             android:name=".ui.activities.MapActivity"
             android:configChanges="screenSize|orientation|screenLayout"/>
         <activity
-            android:name=".ui.activities.LandmarkDetailsActivity"/>
+            android:name=".ui.activities.LandmarkDetailsActivity"
+            android:parentActivityName=".ui.activities.ListLandmarksActivity"/>
         <activity
             android:name=".ui.activities.NewLandmarkActivity"
             android:configChanges="screenSize|orientation|screenLayout"/>

@@ -63,6 +63,9 @@ public class Landmark implements Parcelable {
         if (name.trim().length() < 5) {
 //            Log.d(TAG, "isValid: " + name.trim());
             return ERROR_NAME;
+        } else if (coordinates == null) {
+//            Log.d(TAG, "isValid: " + coordinates.toString());
+            return ERROR_COORDINATES;
         } else if (!coordinates.areValid()) {
 //            Log.d(TAG, "isValid: " + coordinates.toString());
             return ERROR_COORDINATES;

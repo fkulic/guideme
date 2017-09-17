@@ -62,9 +62,10 @@ public class ListLandmarksActivity extends BaseActivity implements FirebaseDbHel
             mLoadingDataDialog.stop();
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             finish();
+        } else {
+            FirebaseDbHelper fb = new FirebaseDbHelper(this);
+            fb.getLandmarks(latlng);
         }
-        FirebaseDbHelper fb = new FirebaseDbHelper(this);
-        fb.getLandmarks(latlng);
     }
 
     @Override
@@ -88,6 +89,7 @@ public class ListLandmarksActivity extends BaseActivity implements FirebaseDbHel
 
     @OnClick(R.id.ibNewLandmark)
     void onClickNewLandmark() {
+        SharedPrefsHelper.getInstance(this).setNewLandmarkCityCoordinates(mCity.coordinates.getLatLngStringForDB());
         Intent intent = new Intent(ListLandmarksActivity.this, NewLandmarkActivity.class);
         startActivity(intent);
     }

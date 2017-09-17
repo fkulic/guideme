@@ -43,10 +43,7 @@ public class City implements Parcelable {
         this.name = name;
         this.adminArea = adminArea;
         this.country = country;
-        String[] latLng = latLngString.split("_");
-        Double latitude = Double.parseDouble(latLng[0])/1000000;
-        Double longitude = Double.parseDouble(latLng[1])/1000000;
-        this.coordinates = new Coordinates(latitude, longitude);
+        this.coordinates = new Coordinates(latLngString);
         this.landmarks = new HashMap<>();
     }
 

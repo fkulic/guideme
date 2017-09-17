@@ -41,7 +41,6 @@
         <item>Record</item>
         <item>Cancel</item>
     </string-array>
-    <string name="title_activity_new_audioo">NewAudiooActivity</string>
     <string name="record_new_audio">Record new audio</string>
     <string name="warning_leave_unsaved">Are you sure?</string>
     <string name="warning_leave_unsaved_audio">Are you sure you want to leave? Audio file will not be saved.</string>
@@ -62,4 +61,15 @@
     <string name="error_landmark_description">Description has to be at least 20 characters long.</string>
     <string name="error_landmark_img">Landmark must have image.</string>
     <string name="error_landmark_coordinates">Illegal coordinates. Try picking another location.</string>
+    <string name="warning_gps_off_directions">Please turn on your GPS before trying to get directions.</string>
+    <string name="image">Image</string>
+    <string name="name">Name</string>
+    <string name="set_location">Set location</string>
+    <string name="audio_files">Audio files</string>
+    <string name="description">Description</string>
+    <string name="please_wait">Please wait</string>
+    <string name="searcing_gps_signal">Searching for GPS signal...</string>
+    <string name="warning_gps_off_directions_map_activity">Turn on your GPS on to get directions.</string>
+    <string name="info_click_to_place_marker">Click on the map to place marker and select coordinates.</string>
+    <string name="error">Error.</string>
 </resources>

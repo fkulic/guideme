@@ -12,8 +12,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.NotificationCompat;
+import android.view.View;
 import android.widget.Toast;
 
 import com.directions.route.AbstractRouting;
@@ -23,7 +25,9 @@ import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.fkulic.guideme.R;
 import com.fkulic.guideme.helper.FirebaseDbHelper;
+import com.fkulic.guideme.helper.SharedPrefsHelper;
 import com.fkulic.guideme.model.City;
+import com.fkulic.guideme.model.Coordinates;
 import com.fkulic.guideme.model.Landmark;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,6 +48,7 @@ import java.util.Map;
 
 import static com.fkulic.guideme.Constants.KEY_CITY;
 import static com.fkulic.guideme.Constants.KEY_CITY_LATLNG;
+import static com.fkulic.guideme.Constants.KEY_COORDINATES;
 import static com.fkulic.guideme.Constants.KEY_LANDMARK;
 import static com.fkulic.guideme.Constants.KEY_LANDMARK_DIRECTIONS;
 import static com.fkulic.guideme.Constants.PERMISSION_REQ_FINE_LOC;
@@ -60,10 +65,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     private Location mCurrentLocation;
     private Location mDestination;
     private Landmark mGoToLandmark;
-    private Marker mGoToMarker;
+    private Marker mMarker;
     private ProgressDialog mProgressDialog;
     private Polyline mPolyline;
     private boolean mNotifiedApproaching = false;
+    private boolean mNewLandmarkSetLocation = false;
 
 
     @Override
@@ -74,7 +80,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
         this.fMap.getMapAsync(this);
         Intent intent = getIntent();
         if (intent.hasExtra(KEY_LANDMARK_DIRECTIONS)) {
-            mProgressDialog = ProgressDialog.show(this, "Please wait", "Searching for GPS signal...", true);
             this.mGoToLandmark = intent.getParcelableExtra(KEY_LANDMARK_DIRECTIONS);
             this.mDestination = new Location("destination");
             this.mDestination.setLatitude(mGoToLandmark.coordinates.latitude);
@@ -83,16 +88,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 //            Log.d(TAG, "onCreate: " + mCity.toString());
             FirebaseDbHelper fb = new FirebaseDbHelper(this);
             fb.getLandmarks(intent.getStringExtra(KEY_CITY_LATLNG));
-        }
-    }
-
-    private void drawLandmarkMarkers() {
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon));
-        for (Map.Entry<String, Landmark> landmarkEntry : mCity.landmarks.entrySet()) {
-            markerOptions.position(landmarkEntry.getValue().coordinates.getLatLng());
-            markerOptions.title(landmarkEntry.getValue().name);
-            mGoToMarker = mGoogleMap.addMarker(markerOptions);
+        } else {
+            mNewLandmarkSetLocation = true;
         }
     }
 
@@ -112,6 +109,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
     protected void onStart() {
         super.onStart();
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (mGoToLandmark != null) {
+            if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                mProgressDialog = ProgressDialog.show(this, getString(R.string.please_wait), getString(R.string.searcing_gps_signal), true);
+            } else if (this.mGoToLandmark != null) {
+                Toast.makeText(this, R.string.warning_gps_off_directions_map_activity, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -143,13 +147,29 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
         }
     }
 
+    private void drawLandmarkMarkers() {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon));
+        for (Map.Entry<String, Landmark> landmarkEntry : mCity.landmarks.entrySet()) {
+            markerOptions.position(landmarkEntry.getValue().coordinates.getLatLng());
+            markerOptions.title(landmarkEntry.getValue().name);
+            mMarker = mGoogleMap.addMarker(markerOptions);
+        }
+    }
+
+
     @Override
     public void onLocationChanged(Location location) {
         if (mProgressDialog != null) {
             if (mProgressDialog.isShowing()) {
-                mProgressDialog.setMessage("Fetching route information.");
+                if (this.mGoToLandmark == null) {
+                    mProgressDialog.dismiss();
+                } else {
+                    mProgressDialog.setMessage("Fetching route information.");
+                }
             }
         }
+
         mCurrentLocation = location;
         if (mGoToLandmark != null) {
             if (mPolyline == null) {
@@ -158,25 +178,76 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
             }
             // TODO: 15.9.2017.  switch to geofencing in (possible) future & create location service
             if (location.distanceTo(mDestination) < 20 && !mNotifiedApproaching) {
-                Intent landmarkIntent = new Intent(MapActivity.this, LandmarkDetailsActivity.class);
-                landmarkIntent.putExtra(KEY_LANDMARK, mGoToLandmark);
-
-                PendingIntent piLandmark = PendingIntent.getActivity(this, 0, landmarkIntent, PendingIntent.FLAG_ONE_SHOT);
-
-                Notification notification = new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.icon)
-                        .setContentTitle(getString(R.string.approaching_landmark_title))
-                        .setContentText(getString(R.string.approaching_landmark_message))
-                        .setContentIntent(piLandmark)
-                        .setAutoCancel(true)
-                        .setLights(Color.CYAN, 1000, 2000)
-                        .setVibrate(new long[]{2000,1000,2000})
-                        .build();
-
-                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                manager.notify(0, notification);
+                createApproachingNotification();
             }
         }
+
+        if (mNewLandmarkSetLocation) {
+            setUpUiForCoordinateSelection();
+        }
+    }
+
+    private void setUpUiForCoordinateSelection() {
+        // Center map on city
+        Coordinates centerOfCity = new Coordinates(SharedPrefsHelper.getInstance(this).getNewLandmarkCityCoordinates());
+        animateToLocation(centerOfCity.getLatLng());
+
+        // Display instructions and fab
+        Toast.makeText(this, R.string.info_click_to_place_marker, Toast.LENGTH_LONG).show();
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fabSaveCoordinates);
+        floatingActionButton.setVisibility(View.VISIBLE);
+
+
+        mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (mMarker != null) {
+                    mMarker.remove();
+                }
+
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.draggable(true);
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon));
+                mMarker = mGoogleMap.addMarker(markerOptions);
+            }
+        });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMarker != null) {
+                    LatLng latLng = mMarker.getPosition();
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(KEY_COORDINATES, new Coordinates(mMarker.getPosition()));
+                    MapActivity.this.setResult(RESULT_OK, resultIntent);
+                    MapActivity.this.finish();
+
+                } else {
+                    Toast.makeText(MapActivity.this, R.string.info_click_to_place_marker, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void createApproachingNotification() {
+        Intent landmarkIntent = new Intent(MapActivity.this, LandmarkDetailsActivity.class);
+        landmarkIntent.putExtra(KEY_LANDMARK, mGoToLandmark);
+
+        PendingIntent piLandmark = PendingIntent.getActivity(this, 0, landmarkIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.icon)
+                .setContentTitle(getString(R.string.approaching_landmark_title))
+                .setContentText(getString(R.string.approaching_landmark_message))
+                .setContentIntent(piLandmark)
+                .setAutoCancel(true)
+                .setLights(Color.CYAN, 1000, 2000)
+                .setVibrate(new long[]{2000,1000,2000})
+                .build();
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(0, notification);
     }
 
     @Override
@@ -189,18 +260,23 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Loc
 
     @Override
     public void onProviderDisabled(String provider) {
+        if (mProgressDialog != null) {
+            if (mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+            }
+        }
     }
 
 
     private void createDestinationMarker(LatLng latLng) {
-        if (mGoToMarker != null) {
-            mGoToMarker.remove();
+        if (mMarker != null) {
+            mMarker.remove();
         }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title(mGoToLandmark.name);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon));
-        mGoToMarker = mGoogleMap.addMarker(markerOptions);
+        mMarker = mGoogleMap.addMarker(markerOptions);
     }
 
     private void animateToLocation(LatLng latLng) {

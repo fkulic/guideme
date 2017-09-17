@@ -49,6 +49,7 @@ import butterknife.OnClick;
 
 import static com.fkulic.guideme.Constants.KEY_AUDIO_NAME;
 import static com.fkulic.guideme.Constants.KEY_AUDIO_PATH;
+import static com.fkulic.guideme.Constants.KEY_COORDINATES;
 import static com.fkulic.guideme.Constants.KEY_LANDMARK;
 import static com.fkulic.guideme.Constants.KEY_NEW_LANDMARK;
 import static com.fkulic.guideme.Constants.PERMISSION_REQ_READ_EXT;
@@ -57,6 +58,7 @@ import static com.fkulic.guideme.Constants.REQ_AUDIO_FROM_FILE;
 import static com.fkulic.guideme.Constants.REQ_AUDIO_RECORD;
 import static com.fkulic.guideme.Constants.REQ_IMAGE_CAMERA;
 import static com.fkulic.guideme.Constants.REQ_IMAGE_GALLERY;
+import static com.fkulic.guideme.Constants.REQ_LANDMARK_LOCATION;
 
 public class NewLandmarkActivity extends BaseActivity implements NewLandmarkAudioAdapter.OnRemoveAudioFile {
     private static final String TAG = "NewLandmarkActivity";
@@ -65,11 +67,13 @@ public class NewLandmarkActivity extends BaseActivity implements NewLandmarkAudi
     private String mImgUrl;
     private NewLandmarkAudioAdapter mAudioAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private Coordinates mLandmarkCoordinates;
 
     @BindView(R.id.etLandmarkName) EditText etLandmarkName;
     @BindView(R.id.ibFromGallery) ImageButton ibFromGallery;
     @BindView(R.id.ibCamera) ImageButton ibCamera;
     @BindView(R.id.ivNewLandmarkPhoto) ImageView ivNewLandmarkPhoto;
+    @BindView(R.id.ibSetLocation) ImageButton ibSetLocation;
     @BindView(R.id.etLandmarkDescription) EditText etLandmarkDescription;
     @BindView(R.id.tvAudioFilesLabel) TextView tvAudioFilesLabel;
     @BindView(R.id.ibNewAudioFile) ImageButton ibNewAudioFile;
@@ -141,6 +145,12 @@ public class NewLandmarkActivity extends BaseActivity implements NewLandmarkAudi
         }
     }
 
+    @OnClick(R.id.ibSetLocation)
+    void onClickSetLocation() {
+        Intent intent = new Intent(NewLandmarkActivity.this, MapActivity.class);
+        startActivityForResult(intent, REQ_LANDMARK_LOCATION);
+    }
+
     @OnClick(R.id.ibNewAudioFile)
     void onClickNewAudioFile() {
         super.showListDialog(NewLandmarkActivity.this, R.string.pick_source, R.array.audio_dialog, new DialogInterface.OnClickListener() {
@@ -167,7 +177,7 @@ public class NewLandmarkActivity extends BaseActivity implements NewLandmarkAudi
     void previewLandmark() {
 
         Landmark landmark = new Landmark(etLandmarkName.getText().toString().trim(),
-                new Coordinates(44.561584, 18.676801),
+                mLandmarkCoordinates,
                 etLandmarkDescription.getText().toString(),
                 mImgUrl,
                 mAudioFiles);
@@ -240,6 +250,7 @@ public class NewLandmarkActivity extends BaseActivity implements NewLandmarkAudi
                     setThumbnail();
                 }
                 break;
+
             case REQ_IMAGE_CAMERA:
                 if (resultCode == RESULT_OK) {
                     setThumbnail();
@@ -248,6 +259,14 @@ public class NewLandmarkActivity extends BaseActivity implements NewLandmarkAudi
                     mImgUrl = null;
                 }
                 break;
+
+            case REQ_LANDMARK_LOCATION:
+                if (resultCode == RESULT_OK)  {
+                    mLandmarkCoordinates = data.getParcelableExtra(KEY_COORDINATES);
+                    Log.d(TAG, "Coordinates set to: " + mLandmarkCoordinates.toString());
+                }
+                break;
+
             case REQ_AUDIO_FROM_FILE:
                 if (resultCode == RESULT_OK && data != null) {
                     String filePath = getUrlFromUri(data.getData());
@@ -257,6 +276,7 @@ public class NewLandmarkActivity extends BaseActivity implements NewLandmarkAudi
                     mAudioAdapter.addAudio(fileName);
                 }
                 break;
+
             case REQ_AUDIO_RECORD:
                 if (resultCode == RESULT_OK) {
                     String name = data.getStringExtra(KEY_AUDIO_NAME);

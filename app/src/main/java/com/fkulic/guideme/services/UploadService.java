@@ -48,6 +48,7 @@ public class UploadService extends IntentService implements OnSuccessListener<Up
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder mBuilder;
     private long mCurrentFileSize;
+    private String mCityLatLng;
 
     public UploadService() {
         super(TAG);
@@ -57,6 +58,10 @@ public class UploadService extends IntentService implements OnSuccessListener<Up
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent.hasExtra(KEY_LANDMARK)) {
+            SharedPrefsHelper prefsHelper = SharedPrefsHelper.getInstance(this);
+            mCityLatLng = prefsHelper.getNewLandmarkCityCoordinates(); // get city coordinates
+            prefsHelper.setNewLandmarkCityCoordinates(null); // reset coordinates
+
             mLandmark = intent.getParcelableExtra(KEY_LANDMARK);
             mAudioKeys = new ArrayList<>(mLandmark.audioUrls.keySet());
 
@@ -107,8 +112,8 @@ public class UploadService extends IntentService implements OnSuccessListener<Up
     }
 
     private void updateDatabase() {
-        // TODO: 16.9.2017. add city if not exists 
-        FirebaseDbHelper.addLandmark(SharedPrefsHelper.getInstance(this).getCurrentCity(), mLandmark);
+        // TODO: 16.9.2017. add city if not exists (possible future)
+        FirebaseDbHelper.addLandmark(mCityLatLng, mLandmark);
         mBuilder.setOngoing(false)
                 .setSmallIcon(R.drawable.ic_success)
                 .setContentTitle(getString(R.string.upload_success))

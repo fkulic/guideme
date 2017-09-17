@@ -15,6 +15,7 @@ public class Constants {
     // integer keys
     public static final int REQ_IMAGE_GALLERY = 25;
     public static final int REQ_IMAGE_CAMERA = 26;
+    public static final int REQ_LANDMARK_LOCATION = 30;
     public static final int REQ_AUDIO_FROM_FILE = 50;
     public static final int REQ_AUDIO_RECORD = 51;
 
@@ -22,10 +23,12 @@ public class Constants {
     public static final String KEY_CITY = "city";
     public static final String KEY_LIST_CITIES = "list_cities";
     public static final String KEY_CITY_NAME = "city_name";
-    public static final String KEY_LANDMARK = "landmark";
     public static final String KEY_CITY_LATLNG = "city_latlng";
+    public static final String KEY_LANDMARK = "landmark";
     public static final String KEY_NEW_LANDMARK = "new_landmark";
     public static final String KEY_LANDMARK_DIRECTIONS = "landmark_directions";
+    public static final String KEY_COORDINATES = "coordinates";
+
 
     //audio
     public static final String KEY_AUDIO_PATH = "key_audio_path";

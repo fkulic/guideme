@@ -28,6 +28,12 @@ public class Coordinates implements Parcelable {
         this.longitude = latLng.longitude;
     }
 
+    public Coordinates(String latLngString) {
+        String[] latLng = latLngString.split("_");
+        this.latitude = Double.parseDouble(latLng[0])/1000000;
+        this.longitude = Double.parseDouble(latLng[1])/1000000;
+    }
+
     public boolean areValid() {
         if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude < 180) {
             return true;

@@ -13,6 +13,7 @@ public class SharedPrefsHelper {
     private static final String DEVICE_WIDTH = "device_width";
     private static final String CURRENT_CITY = "current_city";
     private static final String PERMISSION_ASKED_LOCATION = "permission_asked_loc";
+    private static final String NEW_LAND_CITY_COORDINATES = "new_land_city_coo";
 
     private static SharedPrefsHelper instance = null;
     private SharedPreferences preferences;
@@ -52,6 +53,12 @@ public class SharedPrefsHelper {
         editor.apply();
     }
 
+    public void setNewLandmarkCityCoordinates(String latLngString) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(NEW_LAND_CITY_COORDINATES, latLngString);
+        editor.apply();
+    }
+
     public String getCurrentCity() {
         return preferences.getString(CURRENT_CITY, null);
     }
@@ -68,5 +75,7 @@ public class SharedPrefsHelper {
         return preferences.getBoolean(PERMISSION_ASKED_LOCATION, false);
     }
 
-
+    public String getNewLandmarkCityCoordinates() {
+        return preferences.getString(NEW_LAND_CITY_COORDINATES, null);
+    }
 }

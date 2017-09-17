@@ -2,19 +2,18 @@ package com.fkulic.guideme.ui.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fkulic.guideme.R;
 import com.fkulic.guideme.audio.AudioPlayer;
@@ -31,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.fkulic.guideme.Constants.KEY_CITY_LATLNG;
 import static com.fkulic.guideme.Constants.KEY_LANDMARK;
 import static com.fkulic.guideme.Constants.KEY_LANDMARK_DIRECTIONS;
 import static com.fkulic.guideme.Constants.KEY_NEW_LANDMARK;
@@ -42,9 +42,9 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
     private AudioListAdapter mAudioListAdapter;
     private AudioPlayer mAudioPlayer;
     private RecyclerView.LayoutManager mLayoutManager;
-
     private int mUploadFilesCount = 0;
     private List<String> mAudioKeys;
+    private boolean mNewLandmark;
 
     @BindView(R.id.fabTakeMeThere) FloatingActionButton fabTakeMeThere;
     @BindView(R.id.ivLandmarkPhotoDetails) ImageView ivLandmarkPhotoDetails;
@@ -52,7 +52,6 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
     @BindView(R.id.tvAudioLabel) TextView tvAudioLabel;
     @BindView(R.id.rvAudio) RecyclerView rvAudio;
     @BindView(R.id.bSaveLandmark) Button bSaveLandmark;
-    private boolean mNewLandmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +60,7 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
         Intent intent = getIntent();
         if (intent.hasExtra(KEY_LANDMARK)) {
             this.mLandmark = intent.getParcelableExtra(KEY_LANDMARK);
-            Log.d(TAG, "onCreate: " + this.mLandmark.toString());
+//            Log.d(TAG, "onCreate: " + this.mLandmark.toString());
             ButterKnife.bind(this);
             mNewLandmark = intent.getBooleanExtra(KEY_NEW_LANDMARK, false);
             setUpUI();
@@ -69,23 +68,23 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            startActivity(new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class));
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                startActivity(new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class));
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            startActivity(new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class));
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                startActivity(new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class));
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void setUpUI() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarLandmarkDetalis);
@@ -133,21 +132,35 @@ public class LandmarkDetailsActivity extends AppCompatActivity implements AudioL
 
     @OnClick(R.id.fabTakeMeThere)
     public void takeMeToLandmark() {
-        Intent intent = new Intent(LandmarkDetailsActivity.this, MapActivity.class);
-        intent.putExtra(KEY_LANDMARK_DIRECTIONS, mLandmark);
-        startActivity(intent);
+        LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Intent intent = new Intent(LandmarkDetailsActivity.this, MapActivity.class);
+            intent.putExtra(KEY_LANDMARK_DIRECTIONS, mLandmark);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, R.string.warning_gps_off_directions, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onPlayAudioFile(String audioName) {
+        Toast.makeText(this, "Playing " + audioName + ".", Toast.LENGTH_SHORT).show();
         mAudioPlayer.play(mLandmark, audioName);
     }
 
     @OnClick(R.id.bSaveLandmark)
     public void onClickSaveLandmark() {
+        // get latlng string before service resets it
+        String city = SharedPrefsHelper.getInstance(this).getNewLandmarkCityCoordinates();
+
+        // start uploading landmark
         Intent uploadIntent = new Intent(getApplicationContext(), UploadService.class);
         uploadIntent.putExtra(KEY_LANDMARK, mLandmark);
         startService(uploadIntent);
-        startActivity(new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class));
+
+        // go to list landmarks
+        Intent listLandmarksIntent = new Intent(LandmarkDetailsActivity.this, ListLandmarksActivity.class);
+        listLandmarksIntent.putExtra(KEY_CITY_LATLNG, city);
+        startActivity(listLandmarksIntent);
     }
 }
