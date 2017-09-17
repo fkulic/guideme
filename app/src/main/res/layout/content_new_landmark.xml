@@ -88,7 +88,7 @@
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_marginTop="@dimen/new_landmark_vertical_spacing"
-            android:src="@drawable/icon"
+            android:src="@drawable/ic_set_location"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivNewLandmarkPhoto"/>
 

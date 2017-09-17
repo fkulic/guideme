@@ -57,6 +57,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginRight="24dp"
         android:background="@drawable/button_transparent_border"
+        android:foreground="?selectableItemBackground"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
         android:text="@string/b_confirm_location"
@@ -71,14 +72,14 @@
         android:id="@+id/tvDenyAction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="56dp"
         android:layout_marginLeft="56dp"
+        android:layout_marginRight="56dp"
         android:gravity="center"
         android:text="@string/not_there"
         android:textColor="@color/mainTvNotThere"
         android:textSize="16sp"
-        app:layout_constraintTop_toTopOf="@+id/bAction"
         app:layout_constraintBottom_toBottomOf="@+id/bAction"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/bAction"/>
+        app:layout_constraintRight_toLeftOf="@+id/bAction"
+        app:layout_constraintTop_toTopOf="@+id/bAction"/>
 </android.support.constraint.ConstraintLayout>
