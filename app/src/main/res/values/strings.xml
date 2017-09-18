@@ -72,4 +72,6 @@
     <string name="warning_gps_off_directions_map_activity">Turn on your GPS on to get directions.</string>
     <string name="info_click_to_place_marker">Click on the map to place marker and select coordinates.</string>
     <string name="error">Error.</string>
+    <string name="about">About</string>
+    <string name="audio">Audio</string>
 </resources>
